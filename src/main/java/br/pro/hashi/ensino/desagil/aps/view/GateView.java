@@ -6,88 +6,70 @@ import br.pro.hashi.ensino.desagil.aps.model.Gate;
 import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.net.URL;
 
 public class GateView extends FixedPanel implements ItemListener {
-    private static final int BORDER = 10;
-    private static final int SWITCH_SIZE = 18;
-    private static final int GATE_WIDTH = 90;
-    private static final int GATE_HEIGHT = 60;
-
-    private final Switch[] switches;
     private final Gate gate;
-    private final JCheckBox[] inputBoxes;
-    private final JCheckBox outputBox;
+    private final Switch[] switches;
+    private final JCheckBox[] in;
+    private final JCheckBox out;
+
 
     public GateView(Gate gate) {
-        super(BORDER + SWITCH_SIZE + GATE_WIDTH + SWITCH_SIZE + BORDER, GATE_HEIGHT);
+        super(215, 215);
 
         this.gate = gate;
+
+        JLabel input = new JLabel("Input");
+        JLabel output = new JLabel("Output");
 
         int inputSize = gate.getInputSize();
 
         switches = new Switch[inputSize];
-        inputBoxes = new JCheckBox[inputSize];
+        in = new JCheckBox[inputSize];
 
         for (int i = 0; i < inputSize; i++) {
             switches[i] = new Switch();
-            inputBoxes[i] = new JCheckBox();
+            in[i] = new JCheckBox();
 
             gate.connect(i, switches[i]);
         }
 
-        JLabel inputLabel = new JLabel("Input:");
-        JLabel outputLabel = new JLabel("Output:");
+        out = new JCheckBox();
 
-        outputBox = new JCheckBox();
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        int x, y, step;
-        x = BORDER;
-        y = -(SWITCH_SIZE / 2);
-        step = (GATE_HEIGHT / (inputSize + 1));
-
-        add(inputLabel);
-        for (JCheckBox inputBox : inputBoxes) {
-            y += step;
-            add(inputBox, x, y, SWITCH_SIZE, SWITCH_SIZE);
-            inputBox.addItemListener(this);
-
+        for (JCheckBox i : in) {
+            i.addItemListener(this);
         }
 
-        add(outputBox, BORDER + SWITCH_SIZE + GATE_WIDTH, (GATE_HEIGHT - SWITCH_SIZE) / 2, SWITCH_SIZE, SWITCH_SIZE);
-
-        for (JCheckBox inputBox : inputBoxes) {
-            inputBox.addItemListener(this);
-        }
-
-        add(outputLabel);
-        add(outputBox);
-        outputBox.setEnabled(false);
+        out.setEnabled(false);
 
         update();
+
+        add(input, 5, 5, 55, 15);
+        for (int i = 0; i < inputSize; i++) {
+            add(in[i], 5, 20 + i * 50, 55, 15);
+        }
+        add(output, 5, 155, 55, 15);
+        add(out, 5, 190, 55, 15);
+
     }
+
     private void update() {
         for (int i = 0; i < gate.getInputSize(); i++) {
-            if (inputBoxes[i].isSelected()) {
+            if (in[i].isSelected()) {
                 switches[i].turnOn();
             } else {
                 switches[i].turnOff();
             }
         }
 
-        boolean result = gate.read();
-
-        outputBox.setSelected(result);
+        boolean resultado = gate.read();
+        out.setSelected(resultado);
     }
 
     @Override
-    public void itemStateChanged(ItemEvent event) {
+    public void itemStateChanged(ItemEvent e) {
         update();
     }
-
 }
