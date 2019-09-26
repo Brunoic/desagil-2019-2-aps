@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public class View extends JPanel implements ActionListener {
     private final JComboBox<Gate> menu;
-    private GateView gateView;
+    private GateView view;
 
     public View(LinkedList<Gate> model) {
         menu = new JComboBox<>();
@@ -27,13 +27,13 @@ public class View extends JPanel implements ActionListener {
 
     private void addGateView(int index) {
         Gate gate = menu.getItemAt(index);
-        gateView = new GateView(gate);
-        add(gateView);
+        view = new GateView(gate);
+        add(view);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        remove(gateView);
+        remove(view);
         int index = menu.getSelectedIndex();
         addGateView(index);
 
