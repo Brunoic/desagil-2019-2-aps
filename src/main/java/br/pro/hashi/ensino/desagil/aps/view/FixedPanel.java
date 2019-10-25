@@ -15,7 +15,6 @@ public class FixedPanel extends JPanel {
     protected FixedPanel(int width, int height) {
 
         // É muito importante estabelecer que esse painel
-        // não tem layout, pois caso contrário seu tamanho
         // vai ser definido pelo tamanho de seu conteúdo.
         setLayout(null);
 
